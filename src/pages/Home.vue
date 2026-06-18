@@ -1,35 +1,59 @@
+<script lang="ts" setup>
+import { onMounted } from 'vue'
+
+onMounted(async () => {
+    // Cek apakah browser sedang dalam mode layar penuh (fullscreen)
+    if (document.fullscreenElement) {
+        try {
+            // Paksa keluar dari mode fullscreen
+            await document.exitFullscreen()
+        } catch (err) {
+            console.warn("Gagal keluar dari mode fullscreen:", err)
+        }
+    }
+})
+</script>
+
 <template>
     <div class="w-full h-screen bg-neutral-50 flex flex-col font-sans text-neutral-800 select-none overflow-hidden">
 
         <header
-            class="bg-white border-b border-neutral-200 px-4 py-3 shadow-2xs flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2 z-30 shrink-0">
-            <div class="flex items-center gap-2">
-                <span class="text-xl">書</span>
-                <h1 class="font-bold text-base tracking-wide uppercase text-neutral-900">Kana Learn App</h1>
+            class="bg-white border-b border-neutral-200 px-4 py-3 shadow-sm flex flex-row justify-between items-center gap-4 z-30 shrink-0">
+
+            <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-neutral-900 text-white flex items-center justify-center rounded-lg shadow-sm font-bold text-lg leading-none">
+                    書
+                </div>
+                <h1 class="hidden sm:block font-bold text-sm tracking-widest uppercase text-neutral-900 mt-0.5">
+                    JP Kana Learn
+                </h1>
             </div>
 
-            <nav class="flex items-center gap-2">
-                <RouterLink to="/" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
-                    :class="$route.path === '/' ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'">
-                    Home
+            <nav class="flex items-center bg-neutral-100 p-1 rounded-xl border border-neutral-200/60 shadow-inner">
+                <RouterLink to="/"
+                    class="px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all duration-200 flex items-center gap-1.5"
+                    :class="$route.path === '/' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'">
+                    Beranda
                 </RouterLink>
-                <RouterLink to="/hiragana" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
-                    :class="$route.path === '/hiragana' ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'">
+                <RouterLink to="/hiragana"
+                    class="px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all duration-200 flex items-center gap-1.5"
+                    :class="$route.path === '/hiragana' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'">
                     Hiragana
                 </RouterLink>
-                <RouterLink to="/katakana" class="px-3 py-1.5 rounded-lg text-xs font-bold transition-all"
-                    :class="$route.path === '/katakana' ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'">
+                <RouterLink to="/katakana"
+                    class="px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all duration-200 flex items-center gap-1.5"
+                    :class="$route.path === '/katakana' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'">
                     Katakana
                 </RouterLink>
             </nav>
+
         </header>
 
         <div class="flex-1 w-full overflow-y-auto bg-neutral-50 flex items-center justify-center p-4 md:p-8">
             <div class="w-full max-w-3xl flex flex-col items-center text-center gap-8 py-6">
 
                 <div class="flex flex-col items-center gap-3 max-w-lg">
-                    <div
-                        class="w-16 h-16 bg-neutral-900 text-white text-3xl flex items-center justify-center rounded-2xl shadow-md">
+                    <div class="w-16 h-16 bg-neutral-900 text-white text-3xl flex items-center justify-center rounded-2xl shadow-md">
                         書
                     </div>
                     <h2 class="text-2xl md:text-3xl font-extrabold text-neutral-900 tracking-tight">
