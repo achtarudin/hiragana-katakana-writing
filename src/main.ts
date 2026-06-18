@@ -2,7 +2,7 @@
 import { ViteSSG } from 'vite-ssg'
 import App from './App.vue'
 import { routes } from './router'
-
+import { createHead } from '@unhead/vue/client'
 import './assets/tailwind.css'
 
 // Export const createApp menggunakan ViteSSG
@@ -18,6 +18,6 @@ export const createApp = ViteSSG(
 
     // 3. Fungsi Setup untuk Plugins (seperti Pinia, Google Analytics, dll)
     (instance) => {
-		console.log('ViteSSG instance:', instance)
+		instance.app.use(createHead())
     }
 )
