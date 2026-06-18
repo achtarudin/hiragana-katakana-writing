@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed, reactive, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, reactive, watch, onMounted, onBeforeUnmount,shallowRef } from 'vue'
 import { getStroke } from "perfect-freehand";
 import { getSvgPathFromStroke } from "../utils/util";
 
@@ -109,8 +109,8 @@ function resetBrushOptions() {
 
 // State untuk Kanvas, Warna, Bayangan, & Mode Pen
 type StrokeData = { path: string; color: string }
-const completedLines = ref<StrokeData[]>([])
-const points = ref<Point[]>([])
+const points = shallowRef<Point[]>([])
+const completedLines = shallowRef<StrokeData[]>([])
 const isGridActive = ref(false)
 const isShowWatermark = ref(true)
 const isPenOnly = ref(false)
