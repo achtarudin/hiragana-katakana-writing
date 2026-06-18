@@ -168,10 +168,6 @@ onMounted(() => {
     document.addEventListener('mousedown', handleClickOutside)
     document.addEventListener('touchstart', handleClickOutside)
     document.addEventListener('fullscreenchange', onFullscreenChange)
-
-    setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }, 150);
 })
 
 watch(options, (newVal) => {
