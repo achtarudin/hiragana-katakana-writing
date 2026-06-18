@@ -15,7 +15,6 @@ type GroupKey = string;
 // STATE UTAMA APLIKASI
 const selectedGroup = ref<GroupKey>(Object.keys(props.database)[0])
 const currentIndex = ref(0)
-
 const isSidebarOpen = ref(true)
 
 // STATE NAVIGASI BARIS
@@ -107,11 +106,6 @@ onMounted(() => {
 
     document.addEventListener('mousedown', handleClickOutside)
     document.addEventListener('touchstart', handleClickOutside)
-
-    // 2. UBAH DI SINI: Trik agar mobile browser auto-scroll ke bawah dan hide address bar
-    setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }, 150);
 })
 
 watch(options, (newVal) => {
@@ -212,7 +206,7 @@ function clearCanvas() {
 </script>
 
 <template>
-    <div class="relative w-full h-[100dvh] bg-neutral-50 overflow-hidden select-none flex flex-row font-sans text-neutral-800">
+    <div class="relative w-full h-screen bg-neutral-50 overflow-hidden select-none flex flex-row font-sans text-neutral-800">
 
         <button ref="toggleBtnRef" @click="isSidebarOpen = !isSidebarOpen"
             class="absolute top-4 left-4 z-40 p-2.5 bg-white border border-neutral-200 text-neutral-700 rounded-xl shadow-md hover:bg-neutral-50 transition-all active:scale-95 flex items-center justify-center pointer-events-auto"
