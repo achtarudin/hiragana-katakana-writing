@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import FreeHand from '../components/FreeHand.vue'
-import { useHead } from '@vueuse/head'
+import { useHead } from '@unhead/vue'
 
 useHead({
     title: 'Nihon Moji | Belajar Katakana',

@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Analytics } from '@vercel/analytics/vue';
 
-import { useHead } from '@vueuse/head'
-
+import { useHead } from '@unhead/vue'
 useHead({
     title: 'Nihon Moji | Belajar Hiragana & Katakana',
     meta: [

@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.1",
+    "@unhead/vue": "^3.1.4",
     "@vercel/analytics": "^2.0.1",
-    "@vueuse/head": "^2.0.0",
     "perfect-freehand": "^1.2.3",
     "tailwindcss": "^4.3.1",
     "vue": "^3.5.34",
