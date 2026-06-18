@@ -3,21 +3,24 @@ import { onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 
 useHead({
-	// Fokuskan SEO pada Kana terlebih dahulu sesuai dengan fitur yang siap rilis
-	title: 'Nihon Moji | Belajar Hiragana & Katakana',
-	meta: [
-		{
-			name: 'description',
-			content: 'Aplikasi interaktif gratis untuk belajar, berlatih menulis, dan menguasai huruf Jepang: Hiragana dan Katakana.'
-		},
-		// Open Graph
-		{ property: 'og:title', content: 'Nihon Moji - Belajar Huruf Jepang' },
-		{ property: 'og:description', content: 'Kuasai Hiragana dan Katakana dengan mudah melalui kanvas interaktif kami.' },
-		{ property: 'og:url', content: 'https://nihon-moji.vercel.app/' },
-		{ property: 'og:type', content: 'website' },
-		{ property: 'og:image', content: 'https://nihon-moji.vercel.app/og-image.png' },
-		{ property: 'og:locale', content: 'id_ID' }
-	]
+    title: 'Nihon Moji | Belajar Hiragana & Katakana',
+    meta: [
+        { name: 'description', content: 'Aplikasi interaktif gratis untuk belajar, berlatih menulis, dan menguasai huruf Jepang: Hiragana dan Katakana.' },
+        // Open Graph
+        { property: 'og:title', content: 'Nihon Moji - Belajar Huruf Jepang' },
+        { property: 'og:description', content: 'Kuasai Hiragana dan Katakana dengan mudah melalui kanvas interaktif kami.' },
+        { property: 'og:url', content: 'https://nihon-moji.vercel.app/' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:image', content: 'https://nihon-moji.vercel.app/og-image.png' },
+        { property: 'og:locale', content: 'id_ID' }
+    ],
+    link: [
+        {
+            rel: 'icon',
+            type: 'image/svg+xml',
+            href: '/favicon.svg'
+        }
+    ]
 })
 
 onMounted(async () => {

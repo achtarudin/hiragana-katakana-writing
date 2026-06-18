@@ -68,6 +68,10 @@ function handleClickOutside(event: MouseEvent | TouchEvent) {
 const currentGroup = computed(() => props.database[selectedGroup.value] || [])
 
 watch(selectedGroup, () => {
+	if (isShowWatermark.value === false){
+		isShowWatermark.value = true
+	}
+
     currentIndex.value = 0
     clearCanvas()
 })
@@ -79,7 +83,10 @@ watch(() => props.database, (newDatabase) => {
 }, { deep: true })
 
 watch(currentIndex, () => {
-    clearCanvas()
+	if (isShowWatermark.value === false){
+		isShowWatermark.value = true
+	}
+    // clearCanvas()
 })
 
 // Konfigurasi perfect-freehand
@@ -283,18 +290,29 @@ function clearCanvas() {
             <button v-show="!isNavOpen" ref="toggleBtnRef" @click="toggleTools"
                 class="w-10 h-10 bg-white border border-neutral-200 text-neutral-700 rounded-xl shadow-md hover:bg-neutral-50 transition-all active:scale-95 flex items-center justify-center pointer-events-auto"
                 title="Tools & Pengaturan Kana">
-                <span v-if="!isSidebarOpen" class="text-xl leading-none">☰</span>
+                <svg v-if="!isSidebarOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
                 <span v-else class="text-xl leading-none">✕</span>
             </button>
 
-            <button v-show="!isSidebarOpen && !isNavOpen" @click="toggleFullscreen"
-                class="w-10 h-10 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center text-neutral-700 pointer-events-auto"
-                :title="isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh (Sembunyikan Address Bar)'">
-                <svg v-if="!isFullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+            <button v-show="!isSidebarOpen && !isNavOpen" @click="undoLast" :disabled="completedLines.length === 0"
+                class="w-10 h-10 rounded-xl shadow-md transition-all flex items-center justify-center pointer-events-auto active:scale-95 border bg-neutral-900 border-neutral-900 text-white hover:bg-neutral-800 disabled:bg-white disabled:border-neutral-200 disabled:text-neutral-400 disabled:opacity-60 disabled:active:scale-100 disabled:cursor-not-allowed disabled:shadow-sm"
+                title="Undo (Mundur 1 Guratan)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 7v6h6" />
+                    <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
                 </svg>
-                <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/>
+            </button>
+
+            <button v-show="!isSidebarOpen && !isNavOpen" @click="clearCanvas" :disabled="completedLines.length === 0 && points.length === 0"
+                class="w-10 h-10 rounded-xl shadow-md transition-all flex items-center justify-center pointer-events-auto active:scale-95 border bg-red-500 border-red-500 text-white hover:bg-red-600 disabled:bg-white disabled:border-neutral-200 disabled:text-neutral-400 disabled:opacity-60 disabled:active:scale-100 disabled:cursor-not-allowed disabled:shadow-sm"
+                title="Reset (Hapus Semua Guratan)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21" />
+                    <path d="M22 21H7" />
+                    <path d="m5 11 9 9" />
                 </svg>
             </button>
         </div>
@@ -464,8 +482,9 @@ function clearCanvas() {
                         <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
                     </svg>
                 </button>
+
                 <button @click="isShowWatermark = !isShowWatermark"
-                    :class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isShowWatermark ? 'bg-neutral-100 border-neutral-300 text-neutral-800' : 'bg-white border-neutral-200 text-neutral-400 hover:bg-neutral-50']"
+                    :class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isShowWatermark ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-400 hover:bg-neutral-50']"
                     title="Toggle Bayangan Huruf">
                     <svg v-if="isShowWatermark" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
@@ -476,6 +495,17 @@ function clearCanvas() {
                         <path d="M6.71 6.71A10.61 10.61 0 0 0 2 12s3 7 10 7a10.54 10.54 0 0 0 5.39-1.5" />
                         <path d="M14.12 14.12A3 3 0 0 1 9.88 9.88" />
                         <path d="M17.48 13.87A10.55 10.55 0 0 0 22 12s-3-7-10-7a10.5 10.5 0 0 0-4.48 1.02" />
+                    </svg>
+                </button>
+
+                <button @click="toggleFullscreen"
+                    :class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isFullscreen ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-500 hover:bg-neutral-50']"
+                    :title="isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh (Sembunyikan Address Bar)'">
+                    <svg v-if="!isFullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/>
                     </svg>
                 </button>
 
@@ -498,27 +528,6 @@ function clearCanvas() {
                         <path d="m9 18 6-6-6-6" />
                     </svg>
                 </button>
-
-                <div class="w-[1px] h-5 bg-neutral-200 mx-1 hidden sm:block"></div>
-
-                <button @click="undoLast" :disabled="completedLines.length === 0"
-                    class="h-9 w-9 sm:w-auto sm:px-3 bg-white border border-neutral-200 hover:bg-neutral-50 disabled:opacity-40 disabled:cursor-not-allowed text-neutral-700 font-bold rounded-lg transition-colors text-xs flex items-center justify-center sm:gap-1.5 shrink-0" title="Undo">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 7v6h6" />
-                        <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
-                    </svg>
-                    <span class="hidden sm:inline">Undo</span>
-                </button>
-
-                <button @click="clearCanvas" :disabled="completedLines.length === 0 && points.length === 0"
-                    class="h-9 w-9 sm:w-auto sm:px-3 bg-red-500 hover:bg-red-600 disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-colors text-xs flex items-center justify-center sm:gap-1.5 shrink-0" title="Reset">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21" />
-                        <path d="M22 21H7" />
-                        <path d="m5 11 9 9" />
-                    </svg>
-                    <span class="hidden sm:inline">Reset</span>
-                </button>
             </div>
 
             <div class="relative flex-1 w-full h-full">
@@ -539,7 +548,7 @@ function clearCanvas() {
 
                         <span :class="[
                             'font-mono font-bold tracking-wide transition-all duration-300 leading-none mt-1 md:mt-3 text-center',
-                            currentIndex === index ? 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-black' : 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-neutral-400/25'
+                            currentIndex === index ? 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-neutral-900' : 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-neutral-400/25'
                         ]">
                             {{ item.romaji }}
                         </span>
@@ -583,8 +592,6 @@ function clearCanvas() {
                     </svg>
                 </button>
             </div>
-
-
 
         </main>
     </div>

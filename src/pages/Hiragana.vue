@@ -1,6 +1,29 @@
 <script setup lang="ts">
 import FreeHand from '../components/FreeHand.vue'
 
+import { useHead } from '@vueuse/head'
+
+useHead({
+    title: 'Nihon Moji | Belajar Hiragana',
+    meta: [
+        { name: 'description', content: 'Aplikasi interaktif gratis untuk belajar, berlatih menulis, dan menguasai huruf Jepang: Hiragana dan Katakana.' },
+        // Open Graph
+        { property: 'og:title', content: 'Nihon Moji - Belajar Huruf Jepang' },
+        { property: 'og:description', content: 'Kuasai Hiragana dengan mudah melalui kanvas interaktif kami.' },
+        { property: 'og:url', content: 'https://nihon-moji.vercel.app/hiragana' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:image', content: 'https://nihon-moji.vercel.app/og-image.png' },
+        { property: 'og:locale', content: 'id_ID' }
+    ],
+    link: [
+        {
+            rel: 'icon',
+            type: 'image/svg+xml',
+            href: '/favicon.svg'
+        }
+    ]
+})
+
 const hiraganaDatabase = {
     "Baris Vokal (a, i, u, e, o)": [
         { "kana": "あ", "romaji": "a" }, { "kana": "い", "romaji": "i" }, { "kana": "う", "romaji": "u" }, { "kana": "え", "romaji": "e" }, { "kana": "お", "romaji": "o" }
