@@ -6,6 +6,10 @@ useHead({
     title: 'Nihon Moji | Belajar Hiragana & Katakana',
     meta: [
         { name: 'description', content: 'Aplikasi interaktif gratis untuk belajar, berlatih menulis, dan menguasai huruf Jepang: Hiragana dan Katakana.' },
+		{
+            name: 'google-site-verification',
+            content: 'Bz9SOQwkGMtAqTHWpLTeuJTrqZHTkeiTF7rE5FRh2vw'
+        },
         // Open Graph
         { property: 'og:title', content: 'Nihon Moji - Belajar Huruf Jepang' },
         { property: 'og:description', content: 'Kuasai Hiragana dan Katakana dengan mudah melalui kanvas interaktif kami.' },
