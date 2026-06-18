@@ -15,10 +15,7 @@ type GroupKey = string;
 // STATE UTAMA APLIKASI
 const selectedGroup = ref<GroupKey>(Object.keys(props.database)[0])
 const currentIndex = ref(0)
-
-// STATE SIDEBARS
-const isSidebarOpen = ref(false) // Sidebar Tools/Kana
-const isNavOpen = ref(false)     // Sidebar Navigasi Halaman Utama
+const isSidebarOpen = ref(true)
 
 // STATE FULLSCREEN
 const isFullscreen = ref(false)
@@ -30,38 +27,16 @@ const currentGroupIndex = computed(() => groupKeys.value.indexOf(selectedGroup.v
 // REFS UNTUK DETEKSI CLICK OUTSIDE
 const sidebarRef = ref<HTMLElement | null>(null)
 const toggleBtnRef = ref<HTMLElement | null>(null)
-const navSidebarRef = ref<HTMLElement | null>(null)
-const navToggleBtnRef = ref<HTMLElement | null>(null)
-
-// FUNGSI TOGGLE SIDEBAR
-function toggleTools() {
-    isSidebarOpen.value = !isSidebarOpen.value;
-    if (isSidebarOpen.value) isNavOpen.value = false;
-}
-
-function toggleNav() {
-    isNavOpen.value = !isNavOpen.value;
-    if (isNavOpen.value) isSidebarOpen.value = false;
-}
-
-function closeAllSidebars() {
-    isSidebarOpen.value = false;
-    isNavOpen.value = false;
-}
 
 function handleClickOutside(event: MouseEvent | TouchEvent) {
+    if (!isSidebarOpen.value) return;
+
     const target = event.target as Node;
+    const clickedOutsideSidebar = sidebarRef.value && !sidebarRef.value.contains(target);
+    const clickedOutsideToggleBtn = toggleBtnRef.value && !toggleBtnRef.value.contains(target);
 
-    if (isSidebarOpen.value) {
-        const clickedOutsideSidebar = sidebarRef.value && !sidebarRef.value.contains(target);
-        const clickedOutsideToggleBtn = toggleBtnRef.value && !toggleBtnRef.value.contains(target);
-        if (clickedOutsideSidebar && clickedOutsideToggleBtn) isSidebarOpen.value = false;
-    }
-
-    if (isNavOpen.value) {
-        const clickedOutsideNav = navSidebarRef.value && !navSidebarRef.value.contains(target);
-        const clickedOutsideNavToggle = navToggleBtnRef.value && !navToggleBtnRef.value.contains(target);
-        if (clickedOutsideNav && clickedOutsideNavToggle) isNavOpen.value = false;
+    if (clickedOutsideSidebar && clickedOutsideToggleBtn) {
+        isSidebarOpen.value = false;
     }
 }
 
@@ -93,13 +68,6 @@ const options = reactive({
     end: { taper: 0, cap: true },
 });
 
-// FUNGSI RESET KONFIGURASI KUAS
-function resetBrushOptions() {
-    options.size = window.innerWidth < 768 ? 5 : 10;
-    options.thinning = 0.5;
-    options.streamline = 0.65;
-}
-
 // State untuk Kanvas, Warna, Bayangan, & Mode Pen
 type StrokeData = { path: string; color: string }
 const completedLines = ref<StrokeData[]>([])
@@ -130,6 +98,7 @@ async function toggleFullscreen() {
     }
 }
 
+// Sinkronisasi state fullscreen jika user keluar pakai tombol 'Back' bawaan HP
 function onFullscreenChange() {
     isFullscreen.value = !!document.fullscreenElement;
 }
@@ -161,10 +130,6 @@ onMounted(() => {
     document.addEventListener('mousedown', handleClickOutside)
     document.addEventListener('touchstart', handleClickOutside)
     document.addEventListener('fullscreenchange', onFullscreenChange)
-
-    setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    }, 150);
 })
 
 watch(options, (newVal) => {
@@ -226,7 +191,7 @@ function getCanvasCoordinates(e: PointerEvent): Point {
 }
 
 function handlePointerDown(e: PointerEvent) {
-    if (isSidebarOpen.value || isNavOpen.value) return;
+    if (isSidebarOpen.value) return;
     if (isPenOnly.value && e.pointerType !== 'pen') return;
 
     const target = e.target as HTMLElement;
@@ -269,25 +234,14 @@ function clearCanvas() {
     <div class="relative w-full h-[100dvh] bg-neutral-50 overflow-hidden select-none flex flex-row font-sans text-neutral-800">
 
         <div class="absolute top-4 left-4 z-40 flex flex-col gap-2.5 pointer-events-none">
-
-            <button v-show="!isSidebarOpen" ref="navToggleBtnRef" @click="toggleNav"
+            <button ref="toggleBtnRef" @click="isSidebarOpen = !isSidebarOpen"
                 class="w-10 h-10 bg-white border border-neutral-200 text-neutral-700 rounded-xl shadow-md hover:bg-neutral-50 transition-all active:scale-95 flex items-center justify-center pointer-events-auto"
-                title="Menu Navigasi Halaman">
-                <svg v-if="!isNavOpen" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
-                </svg>
-                <span v-else class="text-xl leading-none">✕</span>
-            </button>
-
-            <button v-show="!isNavOpen" ref="toggleBtnRef" @click="toggleTools"
-                class="w-10 h-10 bg-white border border-neutral-200 text-neutral-700 rounded-xl shadow-md hover:bg-neutral-50 transition-all active:scale-95 flex items-center justify-center pointer-events-auto"
-                title="Tools & Pengaturan Kana">
+                title="Toggle Menu">
                 <span v-if="!isSidebarOpen" class="text-xl leading-none">☰</span>
                 <span v-else class="text-xl leading-none">✕</span>
             </button>
 
-            <button v-show="!isSidebarOpen && !isNavOpen" @click="toggleFullscreen"
+            <button @click="toggleFullscreen"
                 class="w-10 h-10 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-xl shadow-md transition-all active:scale-95 flex items-center justify-center text-neutral-700 pointer-events-auto"
                 :title="isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh (Sembunyikan Address Bar)'">
                 <svg v-if="!isFullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -299,18 +253,16 @@ function clearCanvas() {
             </button>
         </div>
 
-        <div v-if="isSidebarOpen || isNavOpen" @click="closeAllSidebars"
+        <div v-if="isSidebarOpen" @click="isSidebarOpen = false"
             class="absolute inset-0 bg-black/20 backdrop-blur-xs z-30 lg:hidden"></div>
 
-        <aside ref="navSidebarRef" :class="[
-            'absolute top-0 left-0 bottom-0 w-72 bg-white border-r border-neutral-200 z-30 shadow-2xl lg:shadow-md flex flex-col transition-transform duration-300 ease-in-out pointer-events-auto',
-            isNavOpen ? 'translate-x-0' : '-translate-x-full'
+        <aside ref="sidebarRef" :class="[
+            'absolute top-0 left-0 bottom-0 w-80 bg-white border-r border-neutral-200 z-30 shadow-2xl lg:shadow-md flex flex-col transition-transform duration-300 ease-in-out pointer-events-auto',
+            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         ]">
-            <div class="h-20 shrink-0"></div>
+            <div class="h-28 shrink-0"></div>
 
-            <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-1.5 scrollbar-none pb-10">
-                <label class="text-xs font-bold text-neutral-400 tracking-wider uppercase mb-2 px-1">Menu Halaman</label>
-
+            <nav class="px-4 py-2 flex flex-col gap-1 border-b border-neutral-100 shrink-0">
                 <RouterLink to="/"
                     class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all"
                     :class="$route.path === '/' ? 'bg-neutral-900 text-white shadow-sm' : 'text-neutral-500 hover:bg-neutral-100 hover:text-neutral-800'">
@@ -335,16 +287,9 @@ function clearCanvas() {
                     <div class="w-[18px] h-[18px] flex items-center justify-center font-bold text-lg leading-none pt-0.5">ア</div>
                     Katakana
                 </RouterLink>
-            </div>
-        </aside>
+            </nav>
 
-        <aside ref="sidebarRef" :class="[
-            'absolute top-0 left-0 bottom-0 w-80 bg-white border-r border-neutral-200 z-30 shadow-2xl lg:shadow-md flex flex-col transition-transform duration-300 ease-in-out pointer-events-auto',
-            isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        ]">
-            <div class="h-20 shrink-0"></div>
-
-            <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6 scrollbar-none pb-4 pt-1">
+            <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6 scrollbar-none pb-10">
                 <div class="flex flex-col gap-2 shrink-0">
                     <label class="text-xs font-bold text-neutral-400 tracking-wider uppercase">Pilih Baris Kana</label>
                     <div class="relative w-full shrink-0">
@@ -379,7 +324,6 @@ function clearCanvas() {
 
                 <div class="flex flex-col gap-4 shrink-0">
                     <label class="text-xs font-bold text-neutral-400 tracking-wider uppercase">Konfigurasi Kuas</label>
-
                     <div class="flex flex-col gap-1.5">
                         <div class="flex justify-between text-xs font-semibold text-neutral-600">
                             <label>Ukuran Kuas</label>
@@ -387,7 +331,6 @@ function clearCanvas() {
                         </div>
                         <input type="range" min="4" max="64" step="1" v-model.number="options.size" class="w-full accent-neutral-800 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer" />
                     </div>
-
                     <div class="flex flex-col gap-1.5">
                         <div class="flex justify-between text-xs font-semibold text-neutral-600">
                             <label>Efek Tekanan</label>
@@ -395,7 +338,6 @@ function clearCanvas() {
                         </div>
                         <input type="range" min="-1" max="1" step="0.1" v-model.number="options.thinning" class="w-full accent-neutral-800 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer" />
                     </div>
-
                     <div class="flex flex-col gap-1.5">
                         <div class="flex justify-between text-xs font-semibold text-neutral-600">
                             <label>Penstabil Garis</label>
@@ -403,16 +345,6 @@ function clearCanvas() {
                         </div>
                         <input type="range" min="0" max="1" step="0.05" v-model.number="options.streamline" class="w-full accent-neutral-800 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer" />
                     </div>
-
-                    <button @click="resetBrushOptions"
-                        class="w-full py-2 mt-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-600 hover:text-neutral-900 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5"
-                        title="Kembalikan pengaturan kuas ke awal">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                            <path d="M3 3v5h5"/>
-                        </svg>
-                        Reset Setelan Kuas
-                    </button>
                 </div>
 
                 <div class="h-[1px] bg-neutral-100 w-full shrink-0"></div>
@@ -583,8 +515,6 @@ function clearCanvas() {
                     </svg>
                 </button>
             </div>
-
-
 
         </main>
     </div>
