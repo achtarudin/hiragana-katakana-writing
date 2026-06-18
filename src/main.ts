@@ -1,14 +1,26 @@
-import { createApp } from 'vue'
-import { createHead } from '@unhead/vue/client'
+// src/main.ts
+import { ViteSSG } from 'vite-ssg'
+import App from './App.vue'
+import { routes } from './router'
 
 import './tailwind.css'
-import App from './App.vue'
-import { router } from './routes'
 
-const app = createApp(App)
+// Export const createApp menggunakan ViteSSG
+export const createApp = ViteSSG(
+    // 1. Root Component
+    App,
 
-const head = createHead()
+    // 2. Opsi Router
+    {
+        routes,
+        base: import.meta.env.BASE_URL
+    },
 
-app.use(head)
-app.use(router)
-app.mount('#app')
+    // 3. Fungsi Setup untuk Plugins (seperti Pinia, Google Analytics, dll)
+    (instance) => {
+		console.log('ViteSSG instance:', instance)
+        // Catatan: @vueuse/head sudah otomatis diintegrasikan oleh vite-ssg!
+        // Jika Anda punya plugin lain (misal Pinia), pasang di sini:
+        // app.use(createPinia())
+    }
+)
