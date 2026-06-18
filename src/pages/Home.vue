@@ -3,17 +3,20 @@ import { onMounted } from 'vue'
 import { useHead } from '@vueuse/head'
 
 useHead({
-	title: 'JP Kana Learn | Belajar Hiragana & Katakana',
+	// Fokuskan SEO pada Kana terlebih dahulu sesuai dengan fitur yang siap rilis
+	title: 'Nihon Moji | Belajar Hiragana & Katakana',
 	meta: [
 		{
 			name: 'description',
-			content: 'Aplikasi interaktif untuk belajar dan berlatih menulis huruf Jepang (Hiragana dan Katakana) secara gratis.'
+			content: 'Aplikasi interaktif gratis untuk belajar, berlatih menulis, dan menguasai huruf Jepang: Hiragana dan Katakana.'
 		},
-		// Open Graph untuk Social Media Share (WhatsApp, FB, X)
-		{ property: 'og:title', content: 'JP Kana Learn' },
-		{ property: 'og:description', content: 'Belajar menulis huruf Jepang dengan mudah melalui kanvas interaktif.' },
-		{ property: 'og:url', content: 'https://jp-kana-learn.vercel.com' },
-		{ property: 'og:type', content: 'website' }
+		// Open Graph
+		{ property: 'og:title', content: 'Nihon Moji - Belajar Huruf Jepang' },
+		{ property: 'og:description', content: 'Kuasai Hiragana dan Katakana dengan mudah melalui kanvas interaktif kami.' },
+		{ property: 'og:url', content: 'https://nihon-moji.vercel.app/' },
+		{ property: 'og:type', content: 'website' },
+		{ property: 'og:image', content: 'https://nihon-moji.vercel.app/og-image.png' },
+		{ property: 'og:locale', content: 'id_ID' }
 	]
 })
 
@@ -41,8 +44,9 @@ onMounted(async () => {
 					class="w-8 h-8 bg-neutral-900 text-white flex items-center justify-center rounded-lg shadow-sm font-bold text-lg leading-none">
 					書
 				</div>
+				<!-- Teks Logo diperbarui ke Nihon Moji -->
 				<h1 class="hidden sm:block font-bold text-sm tracking-widest uppercase text-neutral-900 mt-0.5">
-					JP Kana Learn
+					Nihon Moji
 				</h1>
 			</div>
 
@@ -67,7 +71,7 @@ onMounted(async () => {
 		</header>
 
 		<div class="flex-1 w-full overflow-y-auto bg-neutral-50 flex items-center justify-center p-4 md:p-8">
-			<div class="w-full max-w-3xl flex flex-col items-center text-center gap-8 py-6">
+			<div class="w-full max-w-4xl flex flex-col items-center text-center gap-8 py-6">
 
 				<div class="flex flex-col items-center gap-3 max-w-lg">
 					<div
@@ -83,8 +87,10 @@ onMounted(async () => {
 					</p>
 				</div>
 
-				<div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mt-2">
+				<!-- Penyesuaian Grid menjadi 3 kolom untuk layar besar -->
+				<div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 mt-2">
 
+					<!-- Kartu Hiragana -->
 					<RouterLink to="/hiragana"
 						class="group bg-white border border-neutral-200 p-6 rounded-2xl shadow-sm hover:shadow-xl hover:border-neutral-400 transition-all duration-300 flex flex-col text-left relative overflow-hidden active:scale-[0.99]">
 						<div
@@ -101,6 +107,7 @@ onMounted(async () => {
 						</h3>
 					</RouterLink>
 
+					<!-- Kartu Katakana -->
 					<RouterLink to="/katakana"
 						class="group bg-white border border-neutral-200 p-6 rounded-2xl shadow-sm hover:shadow-xl hover:border-neutral-400 transition-all duration-300 flex flex-col text-left relative overflow-hidden active:scale-[0.99]">
 						<div
@@ -116,6 +123,37 @@ onMounted(async () => {
 							<span class="inline-block transition-transform group-hover:translate-x-1">→</span>
 						</h3>
 					</RouterLink>
+
+					<!-- Kartu Kanji (Disabled / Coming Soon) -->
+					<div class="group bg-neutral-50 border-2 border-neutral-200 border-dashed p-6 rounded-2xl flex flex-col text-left relative overflow-hidden cursor-not-allowed transition-all duration-300 hover:bg-neutral-100/50"
+						title="Modul Kanji sedang dalam tahap pengembangan">
+						<!-- Karakter Background Transparan -->
+						<div
+							class="absolute -right-4 -bottom-6 text-9xl font-bold text-neutral-200/40 pointer-events-none select-none">
+							漢
+						</div>
+
+						<!-- Ikon Gembok (Menggantikan Kotak Karakter) -->
+						<div
+							class="w-10 h-10 bg-neutral-200/70 rounded-xl flex items-center justify-center text-neutral-500 mb-4 shadow-inner">
+							<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none"
+								stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+								<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+							</svg>
+						</div>
+
+						<!-- Judul, Badge, dan Deskripsi -->
+						<div class="flex flex-col gap-1 z-10">
+							<h3 class="text-lg font-bold text-neutral-400 flex items-center gap-2">
+								Belajar Kanji
+								<span
+									class="text-[9px] bg-neutral-200 text-neutral-500 px-2 py-0.5 rounded-md uppercase tracking-wider font-extrabold">
+									Segera Hadir
+								</span>
+							</h3>
+						</div>
+					</div>
 
 				</div>
 
