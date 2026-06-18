@@ -15,10 +15,7 @@ type GroupKey = string;
 // STATE UTAMA APLIKASI
 const selectedGroup = ref<GroupKey>(Object.keys(props.database)[0])
 const currentIndex = ref(0)
-const isSidebarOpen = ref(false)
-
-// STATE FULLSCREEN
-const isFullscreen = ref(false)
+const isSidebarOpen = ref(true)
 
 // STATE NAVIGASI BARIS
 const groupKeys = computed(() => Object.keys(props.database))
@@ -83,26 +80,6 @@ const brushColors = [
 ]
 const selectedColor = ref(brushColors[0].value)
 
-// --- FITUR FULLSCREEN ---
-async function toggleFullscreen() {
-    try {
-        if (!document.fullscreenElement) {
-            await document.documentElement.requestFullscreen();
-        } else {
-            if (document.exitFullscreen) {
-                await document.exitFullscreen();
-            }
-        }
-    } catch (err) {
-        console.warn("Fullscreen API tidak didukung atau diblokir oleh browser ini.");
-    }
-}
-
-// Sinkronisasi state fullscreen jika user keluar pakai tombol 'Back' bawaan HP
-function onFullscreenChange() {
-    isFullscreen.value = !!document.fullscreenElement;
-}
-
 // --- FITUR CACHE / LOCAL STORAGE ---
 onMounted(() => {
     const savedOptions = localStorage.getItem('app-brush-options')
@@ -129,7 +106,6 @@ onMounted(() => {
 
     document.addEventListener('mousedown', handleClickOutside)
     document.addEventListener('touchstart', handleClickOutside)
-    document.addEventListener('fullscreenchange', onFullscreenChange)
 })
 
 watch(options, (newVal) => {
@@ -159,10 +135,9 @@ watch(isPenOnly, (newVal) => {
 onBeforeUnmount(() => {
     document.removeEventListener('mousedown', handleClickOutside)
     document.removeEventListener('touchstart', handleClickOutside)
-    document.removeEventListener('fullscreenchange', onFullscreenChange)
 })
 
-// Fungsi Navigasi Huruf
+// Fungsi Navigasi Huruf (Dalam Grup)
 function nextPage() {
     if (currentIndex.value < currentGroup.value.length - 1) currentIndex.value++
 }
@@ -171,7 +146,7 @@ function prevPage() {
     if (currentIndex.value > 0) currentIndex.value--
 }
 
-// Fungsi Navigasi Baris Kana
+// Fungsi Navigasi Baris Kana (Pindah Select Group)
 function nextGroup() {
     if (currentGroupIndex.value < groupKeys.value.length - 1) {
         selectedGroup.value = groupKeys.value[currentGroupIndex.value + 1]
@@ -231,7 +206,7 @@ function clearCanvas() {
 </script>
 
 <template>
-    <div class="relative w-full h-[100dvh] bg-neutral-50 overflow-hidden select-none flex flex-row font-sans text-neutral-800">
+    <div class="relative w-full h-screen bg-neutral-50 overflow-hidden select-none flex flex-row font-sans text-neutral-800">
 
         <button ref="toggleBtnRef" @click="isSidebarOpen = !isSidebarOpen"
             class="absolute top-4 left-4 z-40 p-2.5 bg-white border border-neutral-200 text-neutral-700 rounded-xl shadow-md hover:bg-neutral-50 transition-all active:scale-95 flex items-center justify-center pointer-events-auto"
@@ -369,19 +344,6 @@ function clearCanvas() {
         <main class="flex-1 h-full relative flex flex-col overflow-hidden">
 
             <div class="absolute top-4 right-4 z-20 flex flex-wrap justify-end items-center gap-1.5 md:gap-2 pointer-events-auto bg-white/95 border border-neutral-200 p-1 md:p-1.5 rounded-xl shadow-md backdrop-blur-sm max-w-[calc(100vw-5rem)]">
-
-                <button @click="toggleFullscreen"
-                    class="w-9 h-9 bg-white border border-neutral-200 hover:bg-neutral-50 rounded-lg transition-colors flex items-center justify-center text-neutral-700 shrink-0"
-                    :title="isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh (Sembunyikan Address Bar)'">
-                    <svg v-if="!isFullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
-                    </svg>
-                    <svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M8 3v3a2 2 0 0 1-2 2H3"/><path d="M21 8h-3a2 2 0 0 1-2-2V3"/><path d="M3 16h3a2 2 0 0 1 2 2v3"/><path d="M16 21v-3a2 2 0 0 1 2-2h3"/>
-                    </svg>
-                </button>
-
-                <div class="w-[1px] h-5 bg-neutral-200 mx-1"></div>
 
                 <button @click="isPenOnly = !isPenOnly"
                     :class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isPenOnly ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-400 hover:bg-neutral-50']"
@@ -528,10 +490,5 @@ function clearCanvas() {
 .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
-}
-
-/* Memastikan elemen Fullscreen menutupi layar sepenuhnya */
-:fullscreen {
-    background-color: #fbfbfb; /* bg-neutral-50 */
 }
 </style>
