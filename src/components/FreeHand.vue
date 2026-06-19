@@ -792,7 +792,7 @@ function clearCanvas() {
 									'font-mono font-bold tracking-wide transition-all duration-300 leading-none text-center',
 									currentIndex === index && !isChallengeMode
 										? 'text-xl sm:text-2xl lg:text-4xl landscape:text-lg landscape:md:text-4xl text-neutral-400 dark:text-neutral-500'
-										: 'text-xl sm:text-2xl lg:text-4xl landscape:text-lg landscape:md:text-4xl text-neutral-500/40 dark:text-neutral-600/30',
+										: 'text-xl sm:text-2xl lg:text-4xl landscape:text-lg landscape:md:text-4xl text-neutral-500/40 dark:text-neutral-500',
 									(isChallengeMode && item.showType === 'kana' && !isAnswerRevealed) ? 'opacity-0' : 'opacity-100'
 								]">
 									{{ item.romaji }}
@@ -810,7 +810,8 @@ function clearCanvas() {
 				</div>
 
 				<svg @pointerdown="handlePointerDown" @pointermove="handlePointerMove" @pointerup="handlePointerUp"
-					class="w-full h-full bg-transparent cursor-crosshair relative z-10 touch-none"
+					@contextmenu.prevent="() => false"
+					class="w-full h-full bg-transparent cursor-crosshair relative z-10 touch-none canvas-area"
 					style="touch-action: none;">
 					<defs v-if="isGridActive">
 						<pattern id="full-canvas-grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -874,5 +875,12 @@ function clearCanvas() {
 
 .dark :fullscreen {
 	background-color: #0a0a0a;
+}
+
+.canvas-area {
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 </style>
