@@ -77,7 +77,7 @@ onMounted(async () => {
 					</h2>
 					<p class="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
 						Tentukan aksara yang ingin kamu kuasai hari ini. Asah ingatanmu dengan menggambar setiap guratan
-						secara presisi melalui kanvas interaktif kami.
+						secara presisi melalui kanvas interaktif.
 					</p>
 				</div>
 

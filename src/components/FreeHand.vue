@@ -383,16 +383,6 @@ function clearCanvas() {
 				<span v-else class="text-xl leading-none">✕</span>
 			</button>
 
-			<button v-show="!isSidebarOpen && !isNavOpen" @click="undoLast" :disabled="completedLines.length === 0"
-				class="w-10 h-10 rounded-xl shadow-md transition-all flex items-center justify-center pointer-events-auto active:scale-95 border bg-neutral-900 dark:bg-neutral-700 border-neutral-900 dark:border-neutral-700 text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:bg-white dark:disabled:bg-neutral-800 disabled:border-neutral-200 dark:disabled:border-neutral-700 disabled:text-neutral-400 dark:disabled:text-neutral-600 disabled:opacity-60 disabled:active:scale-100 disabled:cursor-not-allowed disabled:shadow-sm"
-				title="Undo (Mundur 1 Guratan)">
-				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-					stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-					<path d="M3 7v6h6" />
-					<path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
-				</svg>
-			</button>
-
 			<button v-show="!isSidebarOpen && !isNavOpen" @click="clearCanvas"
 				:disabled="completedLines.length === 0 && points.length === 0"
 				class="w-10 h-10 rounded-xl shadow-md transition-all flex items-center justify-center pointer-events-auto active:scale-95 border bg-red-500 dark:bg-red-600 border-red-500 dark:border-red-600 text-white hover:bg-red-600 dark:hover:bg-red-700 disabled:bg-white dark:disabled:bg-neutral-800 disabled:border-neutral-200 dark:disabled:border-neutral-700 disabled:text-neutral-400 dark:disabled:text-neutral-600 disabled:opacity-60 disabled:active:scale-100 disabled:cursor-not-allowed disabled:shadow-sm"
@@ -402,6 +392,16 @@ function clearCanvas() {
 					<path d="m7 21-4.3-4.3c-1-1-1-2.5 0-3.4l9.6-9.6c1-1 2.5-1 3.4 0l5.6 5.6c1 1 1 2.5 0 3.4L13 21" />
 					<path d="M22 21H7" />
 					<path d="m5 11 9 9" />
+				</svg>
+			</button>
+
+			<button v-show="!isSidebarOpen && !isNavOpen" @click="undoLast" :disabled="completedLines.length === 0"
+				class="w-10 h-10 rounded-xl shadow-md transition-all flex items-center justify-center pointer-events-auto active:scale-95 border bg-neutral-900 dark:bg-neutral-700 border-neutral-900 dark:border-neutral-700 text-white hover:bg-neutral-800 dark:hover:bg-neutral-600 disabled:bg-white dark:disabled:bg-neutral-800 disabled:border-neutral-200 dark:disabled:border-neutral-700 disabled:text-neutral-400 dark:disabled:text-neutral-600 disabled:opacity-60 disabled:active:scale-100 disabled:cursor-not-allowed disabled:shadow-sm"
+				title="Undo (Mundur 1 Guratan)">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M3 7v6h6" />
+					<path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" />
 				</svg>
 			</button>
 		</div>
@@ -678,7 +678,7 @@ function clearCanvas() {
 					</button>
 
 					<template v-if="true">
-						<div class="w-[1px] h-5 bg-neutral-200 dark:bg-neutral-700 mx-1 hidden sm:block"></div>
+						<div class="w-[1px] h-5 bg-neutral-200 dark:bg-neutral-700 mx-1"></div>
 
 						<button @click="prevPage" :disabled="currentIndex === 0 || !isShowWatermark || isChallengeMode"
 							class="w-9 h-9 bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0">
