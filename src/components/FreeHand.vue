@@ -247,10 +247,11 @@ function handlePointerUp() {
     if (points.value.length > 0) {
         const stroke = getStroke(points.value, options)
         const path = getSvgPathFromStroke(stroke)
-        completedLines.value.push({ path, color: selectedColor.value })
+        completedLines.value = [...completedLines.value, { path, color: selectedColor.value }];
         points.value = []
     }
 }
+
 
 const pathData = computed(() => {
     if (points.value.length === 0) return ''
@@ -259,7 +260,9 @@ const pathData = computed(() => {
 })
 
 function undoLast() {
-    if (completedLines.value.length > 0) completedLines.value.pop()
+    if (completedLines.value.length > 0) {
+        completedLines.value = completedLines.value.slice(0, -1);
+    }
 }
 
 function clearCanvas() {
@@ -360,7 +363,7 @@ function clearCanvas() {
 
             <div class="flex-1 overflow-y-auto p-4 flex flex-col gap-6 scrollbar-none pb-4 pt-1">
                 <div class="flex flex-col gap-2 shrink-0">
-                    <label class="text-xs font-bold text-neutral-400 tracking-wider uppercase">Pilih Baris {{ $route.name }}</label>
+                    <label class="text-xs font-bold text-neutral-400 tracking-wider uppercase">{{ $route.name }}</label>
                     <div class="relative w-full shrink-0">
                         <select v-model="selectedGroup"
                             class="w-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 font-bold pl-3 pr-10 py-2.5 rounded-xl border border-transparent outline-none text-sm cursor-pointer transition-colors focus:border-neutral-400 appearance-none">
@@ -603,7 +606,6 @@ function clearCanvas() {
     scrollbar-width: none;
 }
 
-/* Memastikan elemen Fullscreen menutupi layar sepenuhnya */
 :fullscreen {
     background-color: #fbfbfb; /* bg-neutral-50 */
 }
