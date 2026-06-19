@@ -64,6 +64,10 @@ function startChallenge() {
 }
 
 function toggleChallengeMode() {
+	if (isShowWatermark.value === false) {
+		isShowWatermark.value = true
+	}
+
 	isChallengeMode.value = !isChallengeMode.value;
 	isAnswerRevealed.value = false;
 
@@ -456,7 +460,7 @@ function clearCanvas() {
 							<span
 								:class="['text-[10px] font-mono font-medium tracking-normal leading-none mt-0.5', currentIndex === index ? 'text-neutral-300' : 'text-neutral-400']">
 								{{ (!isChallengeMode || item.showType === 'romaji' || isAnswerRevealed) ? item.romaji :
-								'?' }}
+									'?' }}
 							</span>
 						</button>
 					</div>
@@ -471,7 +475,7 @@ function clearCanvas() {
 						<div class="flex justify-between text-xs font-semibold text-neutral-600">
 							<label>Ukuran Kuas</label>
 							<span class="bg-neutral-100 px-2 py-0.5 rounded text-neutral-800 font-mono">{{ options.size
-								}}px</span>
+							}}px</span>
 						</div>
 						<input type="range" min="4" max="64" step="1" v-model.number="options.size"
 							class="w-full accent-neutral-800 h-1.5 bg-neutral-200 rounded-lg appearance-none cursor-pointer" />
@@ -544,121 +548,134 @@ function clearCanvas() {
 		<main class="flex-1 h-full relative flex flex-col overflow-hidden">
 
 			<div
-				class="absolute top-4 right-4 z-20 flex flex-wrap justify-end items-center gap-1.5 md:gap-2 pointer-events-auto bg-white/95 border border-neutral-200 p-1 md:p-1.5 rounded-xl shadow-md backdrop-blur-sm max-w-[calc(100vw-5rem)]">
+				class="absolute top-4 right-4 z-20 flex flex-col landscape:flex-row md:flex-row items-end md:items-center gap-2 md:gap-3 pointer-events-none">
 
-				<button @click="toggleChallengeMode"
-					:class="['px-3 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0 text-xs font-bold gap-1.5', isChallengeMode ? 'bg-indigo-600 border-indigo-600 text-white shadow-inner' : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50']"
-					title="Mode Tantangan (Acak Urutan & Tampilan)">
-					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M16 3h5v5" />
-						<path d="M8 3H3v5" />
-						<path d="M12 22v-8.3a4 4 0 0 0-1.172-2.828l-4.656-4.656A4 4 0 0 1 5 3.39V3" />
-						<path d="M15.172 10.828l4.656-4.656A4 4 0 0 0 21 3.39V3" />
-					</svg>
-					Challenge
-				</button>
+				<div id="toolbars-2"
+					class="flex bg-white/95 border border-neutral-200 p-1 md:p-1.5 rounded-xl shadow-md backdrop-blur-sm gap-1.5 md:gap-2 pointer-events-auto">
 
-				<button v-if="isChallengeMode" @click="isAnswerRevealed = !isAnswerRevealed"
-					class="px-3 h-9 rounded-lg transition-all flex items-center justify-center border shrink-0 text-xs font-bold gap-1.5 bg-yellow-400 border-yellow-500 text-yellow-900 hover:bg-yellow-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
-					title="Lihat Jawaban">
-					<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-						<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-						<circle cx="12" cy="12" r="3" />
-					</svg>
-					Cek Jawaban
-				</button>
-
-				<div class="w-[1px] h-5 bg-neutral-200 mx-1 hidden sm:block"></div>
-
-				<button @click="isPenOnly = !isPenOnly"
-					:class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isPenOnly ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-400 hover:bg-neutral-50']"
-					:title="isPenOnly ? 'Mode Pen Saja Aktif (Abaikan Sentuhan Jari)' : 'Mode Bebas (Bisa Jari / Pen)'">
-					<svg v-if="isPenOnly" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-						fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-						stroke-linejoin="round">
-						<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-					</svg>
-					<svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-						fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-						stroke-linejoin="round">
-						<path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
-						<path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
-						<path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
-						<path
-							d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
-					</svg>
-				</button>
-
-				<button @click="isShowWatermark = !isShowWatermark"
-					:class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isShowWatermark ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-400 hover:bg-neutral-50']"
-					title="Toggle Bayangan Huruf">
-					<svg v-if="isShowWatermark" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-						viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-						stroke-linejoin="round">
-						<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-						<circle cx="12" cy="12" r="3" />
-					</svg>
-					<svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-						fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-						stroke-linejoin="round">
-						<path d="m2 2 20 20" />
-						<path d="M6.71 6.71A10.61 10.61 0 0 0 2 12s3 7 10 7a10.54 10.54 0 0 0 5.39-1.5" />
-						<path d="M14.12 14.12A3 3 0 0 1 9.88 9.88" />
-						<path d="M17.48 13.87A10.55 10.55 0 0 0 22 12s-3-7-10-7a10.5 10.5 0 0 0-4.48 1.02" />
-					</svg>
-				</button>
-
-
-
-				<template v-if="!isChallengeMode">
-					<div class="w-[1px] h-5 bg-neutral-200 mx-1 hidden sm:block"></div>
-					<button @click="prevPage" :disabled="currentIndex === 0 || !isShowWatermark"
-						class="w-9 h-9 bg-neutral-50 border border-neutral-200 hover:bg-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center text-neutral-700 shrink-0">
-						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<path d="m15 18-6-6 6-6" />
+					<button @click="isPenOnly = !isPenOnly"
+						:class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isPenOnly ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-400 hover:bg-neutral-50']"
+						:title="isPenOnly ? 'Mode Pen Saja Aktif (Abaikan Sentuhan Jari)' : 'Mode Bebas (Bisa Jari / Pen)'">
+						<svg v-if="isPenOnly" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+							viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+							stroke-linecap="round" stroke-linejoin="round">
+							<path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+						</svg>
+						<svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round">
+							<path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0" />
+							<path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2" />
+							<path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8" />
+							<path
+								d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" />
 						</svg>
 					</button>
 
-					<div class="px-1 text-xs font-bold text-neutral-800 min-w-[30px] text-center hidden sm:block transition-opacity"
-						:class="!isShowWatermark ? 'opacity-40' : ''">
-						{{ currentIndex + 1 }}/{{ activeGroup.length }}
-					</div>
-
-					<button @click="nextPage" :disabled="currentIndex === activeGroup.length - 1 || !isShowWatermark"
-						class="w-9 h-9 bg-neutral-50 border border-neutral-200 hover:bg-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center text-neutral-700 shrink-0">
-						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-							stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-							<path d="m9 18 6-6-6-6" />
+					<button @click="isShowWatermark = !isShowWatermark" v-if="!isChallengeMode"
+						:class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isShowWatermark ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-400 hover:bg-neutral-50']"
+						title="Toggle Bayangan Huruf">
+						<svg v-if="isShowWatermark" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+							viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+							stroke-linecap="round" stroke-linejoin="round">
+							<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+							<circle cx="12" cy="12" r="3" />
+						</svg>
+						<svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+							stroke-linejoin="round">
+							<path d="m2 2 20 20" />
+							<path d="M6.71 6.71A10.61 10.61 0 0 0 2 12s3 7 10 7a10.54 10.54 0 0 0 5.39-1.5" />
+							<path d="M14.12 14.12A3 3 0 0 1 9.88 9.88" />
+							<path d="M17.48 13.87A10.55 10.55 0 0 0 22 12s-3-7-10-7a10.5 10.5 0 0 0-4.48 1.02" />
 						</svg>
 					</button>
-				</template>
 
-				<div class="w-[1px] h-5 bg-neutral-200 mx-1 hidden sm:block"></div>
-				<button @click="toggleFullscreen"
-					:class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isFullscreen ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-500 hover:bg-neutral-50']"
-					:title="isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh (Sembunyikan Address Bar)'">
-					<svg v-if="!isFullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-						viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-						stroke-linejoin="round">
-						<path d="M8 3H5a2 2 0 0 0-2 2v3" />
-						<path d="M21 8V5a2 2 0 0 0-2-2h-3" />
-						<path d="M3 16v3a2 2 0 0 0 2 2h3" />
-						<path d="M16 21h3a2 2 0 0 0 2-2v-3" />
-					</svg>
-					<svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-						fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-						stroke-linejoin="round">
-						<path d="M8 3v3a2 2 0 0 1-2 2H3" />
-						<path d="M21 8h-3a2 2 0 0 1-2-2V3" />
-						<path d="M3 16h3a2 2 0 0 1 2 2v3" />
-						<path d="M16 21v-3a2 2 0 0 1 2-2h3" />
-					</svg>
-				</button>
+					<button @click="toggleFullscreen"
+						:class="['w-9 h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0', isFullscreen ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-500 hover:bg-neutral-50']"
+						:title="isFullscreen ? 'Keluar Layar Penuh' : 'Layar Penuh (Sembunyikan Address Bar)'">
+						<svg v-if="!isFullscreen" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+							viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+							stroke-linecap="round" stroke-linejoin="round">
+							<path d="M8 3H5a2 2 0 0 0-2 2v3" />
+							<path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+							<path d="M3 16v3a2 2 0 0 0 2 2h3" />
+							<path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+						</svg>
+						<svg v-else xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+							fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+							stroke-linejoin="round">
+							<path d="M8 3v3a2 2 0 0 1-2 2H3" />
+							<path d="M21 8h-3a2 2 0 0 1-2-2V3" />
+							<path d="M3 16h3a2 2 0 0 1 2 2v3" />
+							<path d="M16 21v-3a2 2 0 0 1 2-2h3" />
+						</svg>
+					</button>
+
+					<template v-if="!isChallengeMode">
+						<div class="w-[1px] h-5 bg-neutral-200 mx-1 hidden sm:block"></div>
+
+						<button @click="prevPage" :disabled="currentIndex === 0 || !isShowWatermark"
+							class="w-9 h-9 bg-neutral-50 border border-neutral-200 hover:bg-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center text-neutral-700 shrink-0">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+								stroke-linejoin="round">
+								<path d="m15 18-6-6 6-6" />
+							</svg>
+						</button>
+
+						<div class="px-1 text-xs font-bold text-neutral-800 min-w-[30px] h-9 hidden sm:flex items-center justify-center transition-opacity"
+							:class="!isShowWatermark ? 'opacity-40' : ''">
+							{{ currentIndex + 1 }}/{{ activeGroup.length }}
+						</div>
+
+						<button @click="nextPage"
+							:disabled="currentIndex === activeGroup.length - 1 || !isShowWatermark"
+							class="w-9 h-9 bg-neutral-50 border border-neutral-200 hover:bg-neutral-200 disabled:opacity-40 disabled:cursor-not-allowed rounded-lg transition-colors flex items-center justify-center text-neutral-700 shrink-0">
+							<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+								fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+								stroke-linejoin="round">
+								<path d="m9 18 6-6-6-6" />
+							</svg>
+						</button>
+					</template>
+				</div>
+
+				<div id="toolbars-1"
+					class="flex bg-white/95 border border-neutral-200 p-1 md:p-1.5 rounded-xl shadow-md backdrop-blur-sm gap-1.5 pointer-events-auto">
+
+					<button v-if="isChallengeMode" @click="isAnswerRevealed = !isAnswerRevealed" :class="[
+						'h-9 rounded-lg transition-all flex items-center justify-center border shrink-0 text-xs font-bold gap-0 sm:gap-1.5 shadow-sm',
+						'w-9 sm:w-auto sm:px-3',
+						isAnswerRevealed ? 'bg-neutral-900 border-neutral-900 text-white' : 'bg-white border-neutral-200 text-neutral-500 hover:bg-neutral-50'
+					]" title="Lihat Jawaban">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+							stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+							<path d="M7 11V7a5 5 0 0 1 9.9-1" />
+						</svg>
+						<span class="hidden sm:inline-block">Cek Jawaban</span>
+					</button>
+
+					<button @click="toggleChallengeMode" :class="[
+						'h-9 rounded-lg transition-colors flex items-center justify-center border shrink-0 text-xs font-bold gap-0 sm:gap-1.5',
+						'w-9 sm:w-auto sm:px-3',
+						isChallengeMode ? 'bg-neutral-900 border-neutral-900 text-white shadow-inner' : 'bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50'
+					]" title="Mode Tantangan (Acak Urutan & Tampilan)">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+							stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<rect width="20" height="12" x="2" y="6" rx="2" />
+							<path d="M6 12h4" />
+							<path d="M8 10v4" />
+							<path d="M15 13h.01" />
+							<path d="M18 11h.01" />
+						</svg>
+						<span class="hidden sm:inline-block">Challenge</span>
+					</button>
+				</div>
 
 			</div>
+
 
 			<div class="relative flex-1 w-full h-full">
 				<div :class="[
@@ -671,17 +688,17 @@ function clearCanvas() {
 					]">
 						<span :class="[
 							'font-medium font-sans leading-none transition-all duration-300 text-center',
-							currentIndex === index ? 'text-[10vh] sm:text-[14vh] md:text-[16vh] lg:text-[18vh] text-neutral-400 font-semibold' : 'text-[10vh] sm:text-[14vh] md:text-[16vh] lg:text-[18vh] text-neutral-400/25 font-semibold'
+							currentIndex === index && !isChallengeMode ? 'text-[10vh] sm:text-[14vh] md:text-[16vh] lg:text-[18vh] text-neutral-400 font-semibold' : 'text-[10vh] sm:text-[14vh] md:text-[16vh] lg:text-[18vh] text-neutral-400/25 font-semibold'
 						]">
 							{{ (!isChallengeMode || item.showType === 'kana' || isAnswerRevealed) ? item.kana : '?' }}
 						</span>
 
 						<span :class="[
 							'font-mono font-bold tracking-wide transition-all duration-300 leading-none mt-1 md:mt-3 text-center',
-							currentIndex === index ? 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-neutral-900' : 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-neutral-400/25'
+							currentIndex === index && !isChallengeMode ? 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-neutral-400' : 'text-[3.5vh] sm:text-[4vh] lg:text-[5vh] text-neutral-400/25'
 						]">
-							{{ (!isChallengeMode || item.showType === 'romaji' || isAnswerRevealed) ? item.romaji : '?'
-							}}
+							{{ (!isChallengeMode || item.showType === 'romaji' || isAnswerRevealed) ? item.romaji :
+								'?' }}
 						</span>
 					</div>
 				</div>
