@@ -32,33 +32,37 @@ onMounted(async () => {
 
 			<div class="flex items-center gap-2.5">
 				<div
-					class="w-8 h-8 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center rounded-lg shadow-sm font-bold text-lg leading-none transition-colors">
+					class="w-8 h-8 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 flex items-center justify-center rounded-lg shadow-sm font-bold text-md leading-none transition-colors">
 					書
 				</div>
 				<h1
-					class="hidden sm:block font-bold text-sm tracking-widest uppercase text-neutral-900 dark:text-white mt-0.5">
+					class="font-bold text-sm tracking-widest uppercase text-neutral-900 dark:text-white mt-0.5">
 					Nihon Moji
 				</h1>
 			</div>
 
-			<nav
-				class="flex items-center bg-neutral-100 dark:bg-neutral-800 p-1 rounded-xl border border-neutral-200/60 dark:border-neutral-700 shadow-inner transition-colors">
-				<RouterLink to="/"
-					class="px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all duration-200 flex items-center gap-1.5"
-					:class="$route.path === '/' ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'">
-					Beranda
-				</RouterLink>
-				<RouterLink to="/hiragana"
-					class="px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all duration-200 flex items-center gap-1.5"
-					:class="$route.path === '/hiragana' ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'">
-					Hiragana
-				</RouterLink>
-				<RouterLink to="/katakana"
-					class="px-3 sm:px-4 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold transition-all duration-200 flex items-center gap-1.5"
-					:class="$route.path === '/katakana' ? 'bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200'">
-					Katakana
-				</RouterLink>
-			</nav>
+			<a href="https://www.instagram.com/encang_cutbray/" target="_blank" rel="noopener noreferrer"
+				class="group flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/60 dark:border-neutral-700 hover:border-pink-300 dark:hover:border-pink-800 hover:bg-white dark:hover:bg-neutral-800 hover:shadow-sm transition-all duration-300">
+
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+					stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+					class="text-neutral-500 dark:text-neutral-400 group-hover:text-pink-600 dark:group-hover:text-pink-500 transition-colors shrink-0">
+					<rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+					<path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+					<line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+				</svg>
+
+				<div class="flex items-center gap-1">
+					<span
+						class="hidden sm:inline-block text-[10px] uppercase tracking-wider font-bold leading-none text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-500 dark:group-hover:text-neutral-400 transition-colors">
+						Created by
+					</span>
+					<span
+						class="text-xs font-bold leading-none text-neutral-600 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
+						@encang_cutbray
+					</span>
+				</div>
+			</a>
 
 		</header>
 

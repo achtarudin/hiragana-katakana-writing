@@ -829,32 +829,45 @@ function clearCanvas() {
 			</div>
 
 			<div
-				class="absolute bottom-4 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-4 z-20 flex items-center justify-center gap-2 pointer-events-auto">
-				<button @click="prevGroup" :disabled="currentGroupIndex === 0"
-					class="w-10 h-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-full shadow-md transition-colors flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0"
-					title="Baris Sebelumnya">
-					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-						<path d="m15 18-6-6 6-6" />
-					</svg>
-				</button>
+				class="absolute bottom-4 left-0 right-0 px-4 md:px-6 z-20 flex flex-col md:flex-row-reverse items-center justify-center md:justify-between gap-4 pointer-events-none">
+				<div class="flex items-center gap-2 shrink-0 pointer-events-auto">
+					<button @click="prevGroup" :disabled="currentGroupIndex === 0"
+						class="w-10 h-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-full shadow-md transition-colors flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0"
+						title="Baris Sebelumnya">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+							stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<path d="m15 18-6-6 6-6" />
+						</svg>
+					</button>
 
-				<div
-					class="bg-neutral-900/80 dark:bg-neutral-800/80 text-white text-xs px-4 py-2.5 rounded-full backdrop-blur-sm pointer-events-none shadow flex items-center gap-2 shrink-0 border border-transparent dark:border-neutral-700">
-					<span class="font-bold text-neutral-300 pr-2 border-r border-neutral-600">{{ selectedGroup }}</span>
-					<span>Guratan: <span class="font-bold text-yellow-400">{{ completedLines.length }}</span></span>
+					<div
+						class="bg-neutral-900/80 dark:bg-neutral-800/80 text-white text-xs px-4 py-2.5 rounded-full backdrop-blur-sm shadow flex items-center gap-2 shrink-0 border border-transparent dark:border-neutral-700">
+						<span class="font-bold text-neutral-300 pr-2 border-r border-neutral-600">{{ selectedGroup
+							}}</span>
+						<span>Guratan: <span class="font-bold text-yellow-400">{{ completedLines.length }}</span></span>
+					</div>
+
+					<button @click="nextGroup" :disabled="currentGroupIndex === groupKeys.length - 1"
+						class="w-10 h-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-full shadow-md transition-colors flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0"
+						title="Baris Selanjutnya">
+						<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+							stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+							<path d="m9 18 6-6-6-6" />
+						</svg>
+					</button>
 				</div>
 
-				<button @click="nextGroup" :disabled="currentGroupIndex === groupKeys.length - 1"
-					class="w-10 h-10 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-full shadow-md transition-colors flex items-center justify-center text-neutral-700 dark:text-neutral-300 shrink-0"
-					title="Baris Selanjutnya">
-					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
-						stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-						<path d="m9 18 6-6-6-6" />
-					</svg>
-				</button>
-			</div>
+				<a href="https://www.instagram.com/encang_cutbray/" target="_blank" rel="noopener noreferrer"
+					class="group flex items-center justify-center gap-2 px-3 sm:px-4 py-1.5 rounded-full md:rounded-xl bg-white/90 dark:bg-neutral-800/90 backdrop-blur-sm md:bg-neutral-100 md:dark:bg-neutral-800 border border-neutral-200/60 dark:border-neutral-700 hover:border-pink-300 dark:hover:border-pink-800 hover:bg-white dark:hover:bg-neutral-800 hover:shadow-sm transition-all duration-300 shrink-0 pointer-events-auto">
 
+					<div class="flex items-center gap-1">
+						<span
+							class="text-xs font-bold leading-none text-neutral-600 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
+							@encang_cutbray
+						</span>
+					</div>
+				</a>
+			</div>
 		</main>
 	</div>
 </template>
@@ -878,9 +891,9 @@ function clearCanvas() {
 }
 
 .canvas-area {
-    touch-action: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
+	touch-action: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 </style>
